@@ -26,9 +26,30 @@ const iconUpload    = document.getElementById('iconUpload');
 const searchInput   = document.getElementById('searchInput');
 
 // ── Storage ────────────────────────────────────────────
-function loadProjects() {
+
+/**
+ * Load projects from localStorage when available (owner's working copy),
+ * otherwise fetch projects.json from the repository so all visitors see
+ * the publicly committed data.
+ */
+async function loadProjects() {
   try {
-    projects = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      projects = JSON.parse(stored) || [];
+      return;
+    }
+  } catch {
+    // fall through to fetch
+  }
+  // No local data – load the committed public data
+  try {
+    const res = await fetch('projects.json');
+    if (res.ok) {
+      projects = await res.json();
+    } else {
+      projects = [];
+    }
   } catch {
     projects = [];
   }
@@ -36,6 +57,23 @@ function loadProjects() {
 
 function saveProjects() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+}
+
+/**
+ * Download the current project list as projects.json.
+ * Commit the downloaded file to the repository to publish changes publicly.
+ */
+function exportProjects() {
+  const json = JSON.stringify(projects, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'projects.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 // ── Utilities ──────────────────────────────────────────
@@ -304,6 +342,9 @@ document.getElementById('btnClearIcon').addEventListener('click', function () {
   clearIconPreview();
 });
 
+// Export JSON
+document.getElementById('btnExport').addEventListener('click', exportProjects);
+
 // Search
 searchInput.addEventListener('input', function (e) {
   render(e.target.value);
@@ -361,5 +402,4 @@ projectForm.addEventListener('submit', function (e) {
 });
 
 // ── Init ──────────────────────────────────────────────
-loadProjects();
-render();
+loadProjects().then(function () { render(); });
