@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Museum</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-text">
+        <h1>🗂️ Project Museum</h1>
+        <p>Your deployed projects, all in one place</p>
+      </div>
+      <button class="btn-primary" id="btnAdd">+ Add Project</button>
+    </div>
+  </header>
+
+  <!-- ── Search ─────────────────────────────────────────── -->
+  <div class="search-bar">
+    <div class="search-inner">
+      <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd"
+          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+          clip-rule="evenodd" />
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search by name, description or tag…" autocomplete="off" />
+    </div>
+  </div>
+
+  <!-- ── Project Grid ───────────────────────────────────── -->
+  <main class="main-content" id="mainContent">
+    <div id="projectsGrid" class="projects-grid"></div>
+    <div id="emptyState" class="empty-state">
+      <div class="empty-icon">🚀</div>
+      <h2>No projects yet</h2>
+      <p>Click <strong>+ Add Project</strong> to add your first project</p>
+    </div>
+  </main>
+
+  <!-- ── Modal backdrop ────────────────────────────────── -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true"></div>
+
+  <!-- ── Add / Edit Modal ──────────────────────────────── -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h2 id="modalTitle">Add Project</h2>
+        <button class="btn-close" id="btnClose" aria-label="Close dialog">✕</button>
+      </div>
+
+      <form id="projectForm" novalidate>
+
+        <div class="form-group">
+          <label for="projectName">Project Name <span class="required">*</span></label>
+          <input type="text" id="projectName" placeholder="My Awesome Project" autocomplete="off" required />
+        </div>
+
+        <div class="form-group">
+          <label for="projectUrl">URL <span class="required">*</span></label>
+          <input type="url" id="projectUrl" placeholder="https://myproject.vercel.app" required />
+        </div>
+
+        <div class="form-group">
+          <label for="projectDesc">Description <span class="hint">(optional)</span></label>
+          <textarea id="projectDesc" placeholder="What does this project do?" rows="2"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="projectTags">Tags <span class="hint">(comma-separated, optional)</span></label>
+          <input type="text" id="projectTags" placeholder="react, api, fullstack" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label>Icon</label>
+          <div class="icon-row">
+            <div class="icon-preview" id="iconPreview">
+              <span class="icon-placeholder" id="iconPlaceholder" aria-hidden="true">🖼️</span>
+              <img id="previewImg" src="" alt="Icon preview" />
+            </div>
+            <div class="icon-controls">
+              <button type="button" class="btn-secondary" id="btnFetchIcon">🔍 Auto-fetch</button>
+              <label class="btn-secondary" for="iconUpload">📁 Upload image</label>
+              <input type="file" id="iconUpload" accept="image/*" hidden />
+              <button type="button" class="btn-secondary" id="btnClearIcon">✕ Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-ghost" id="btnCancel">Cancel</button>
+          <button type="submit" class="btn-primary" id="btnSave">Save Project</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
