@@ -15,7 +15,12 @@
         <h1>🗂️ Project Museum</h1>
         <p>Your deployed projects, all in one place</p>
       </div>
-      <button class="btn-primary" id="btnAdd">+ Add Project</button>
+      <div class="header-actions">
+        <button class="btn-secondary" id="btnExport" title="Download your saved projects as projects.json">⬇️ Export</button>
+        <label class="btn-secondary" for="importFile" title="Import projects from a projects.json file">⬆️ Import</label>
+        <input type="file" id="importFile" accept=".json,application/json" hidden />
+        <button class="btn-primary" id="btnAdd">+ Add Project</button>
+      </div>
     </div>
   </header>
 
