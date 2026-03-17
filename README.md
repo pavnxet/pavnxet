@@ -1,16 +1,32 @@
-## Hi there 👋
+# Project Museum
 
-<!--
-**pavnxet/pavnxet** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+A simple and elegant way to manage and showcase your deployed projects.
 
-Here are some ideas to get you started:
+## Features
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- **Link Management**: Save your project names and links.
+- **Auto-fetch Icons**: Automatically fetches the favicon from the provided URL.
+- **Manual Upload**: Option to upload a custom icon for your projects.
+- **Card View**: Projects are displayed in a clean, modern card grid.
+- **Responsive Design**: Works great on mobile and desktop.
+
+## Getting Started
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Built With
+
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Cheerio](https://cheerio.js.org/) (for icon fetching)
+- [TypeScript](https://www.typescriptlang.org/)

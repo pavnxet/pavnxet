@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "name": "GitHub",
+    "url": "https://github.com",
+    "icon": "https://github.com/favicon.ico"
+  },
+  {
+    "id": "2",
+    "name": "Next.js",
+    "url": "https://nextjs.org",
+    "icon": "https://nextjs.org/favicon.ico"
+  },
+  {
+    "id": "cfdb43a7-25d2-4aa8-aa4a-7427e1418e88",
+    "name": "Google",
+    "url": "https://google.com",
+    "icon": "https://google.com/favicon.ico"
+  }
+]
