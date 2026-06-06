@@ -1,7 +1,5 @@
 ## Hi there 👋
 
-# 1. Clear pdf
-[Click here](https://pavnxet.github.io/ClearLink-PDF/)
+![Stats](./profile/stats.svg)
 
-# 2. Git-OOPS
-[Click here](https://pavnxet.github.io/git-oops/)
+![Top Languages](./profile/top-langs.svg)
