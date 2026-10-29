@@ -9,7 +9,7 @@
         aria-labelledby="descId"
       >
         <title id="titleId">Pavneet Singh&#39;s GitHub Stats, Rank: B</title>
-        <desc id="descId">Total Stars Earned: 14, Total Commits  (last year) : 1385, Total PRs: 92, Total Issues: 8, Contributed to (last year): 5</desc>
+        <desc id="descId">Total Stars Earned: 14, Total Commits  (last year) : 1415, Total PRs: 94, Total Issues: 8, Contributed to (last year): 5</desc>
         <style>
           .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -73,7 +73,7 @@
         stroke-dashoffset: 251.32741228718345;
       }
       to {
-        stroke-dashoffset: 134.5275758422276;
+        stroke-dashoffset: 133.9758075590039;
       }
     }
   
@@ -199,7 +199,7 @@
         x="224.01"
         y="12.5"
         data-testid="prs"
-      >92</text>
+      >94</text>
     </g>
   </g><g transform="translate(0, 75)">
     <g class="stagger" style="animation-delay: 900ms" transform="translate(25, 0)">
