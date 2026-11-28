@@ -25,6 +25,10 @@ const iconPlaceholder = document.getElementById('iconPlaceholder');
 const iconUpload    = document.getElementById('iconUpload');
 const searchInput   = document.getElementById('searchInput');
 
+// Export / Import DOM refs
+const btnExport     = document.getElementById('btnExport');
+const importFile    = document.getElementById('importFile');
+
 // ── Storage ────────────────────────────────────────────
 function loadProjects() {
   try {
@@ -36,6 +40,61 @@ function loadProjects() {
 
 function saveProjects() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+}
+
+// ── Export / Import helpers ────────────────────────────
+function exportProjects() {
+  const data = JSON.stringify(projects, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'projects.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(a.href);
+}
+
+function importProjectsFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!Array.isArray(parsed)) {
+        alert('Invalid file: expected an array of projects.');
+        return;
+      }
+      if (!confirm('Importing will replace your local saved projects. Continue?')) return;
+      projects = parsed;
+      saveProjects();
+      render(searchInput.value);
+      alert('Projects imported successfully.');
+    } catch (err) {
+      alert('Error parsing JSON: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function tryLoadGlobalProjects() {
+  fetch('projects.json', { cache: 'no-store' })
+    .then(function (r) {
+      if (!r.ok) return null;
+      return r.json();
+    })
+    .then(function (data) {
+      if (!data) return;
+      if (Array.isArray(data) && projects.length === 0 && data.length > 0) {
+        projects = data;
+        saveProjects();
+        render();
+        console.log('Loaded global projects.json');
+      }
+    })
+    .catch(function (err) {
+      console.debug('Global projects.json not loaded:', err);
+    });
 }
 
 // ── Utilities ──────────────────────────────────────────
@@ -275,6 +334,20 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
 });
 
+// Export / Import handlers
+if (btnExport) {
+  btnExport.addEventListener('click', function () {
+    exportProjects();
+  });
+}
+if (importFile) {
+  importFile.addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    importProjectsFile(file);
+    e.target.value = ''; // allow same file to be picked again
+  });
+}
+
 // Auto-fetch icon
 document.getElementById('btnFetchIcon').addEventListener('click', function () {
   var url = fUrl.value.trim();
@@ -362,4 +435,5 @@ projectForm.addEventListener('submit', function (e) {
 
 // ── Init ──────────────────────────────────────────────
 loadProjects();
+tryLoadGlobalProjects();
 render();

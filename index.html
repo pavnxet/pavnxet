@@ -15,7 +15,14 @@
         <h1>🗂️ Project Museum</h1>
         <p>Your deployed projects, all in one place</p>
       </div>
-      <button class="btn-primary" id="btnAdd">+ Add Project</button>
+
+      <!-- Actions: Add, Export, Import -->
+      <div class="header-actions">
+        <button class="btn-primary" id="btnAdd">+ Add Project</button>
+        <button class="btn-secondary" id="btnExport">📤 Export</button>
+        <label class="btn-secondary" for="importFile">📥 Import</label>
+        <input type="file" id="importFile" accept="application/json" hidden />
+      </div>
     </div>
   </header>
 
