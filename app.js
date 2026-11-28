@@ -25,6 +25,10 @@ const iconPlaceholder = document.getElementById('iconPlaceholder');
 const iconUpload    = document.getElementById('iconUpload');
 const searchInput   = document.getElementById('searchInput');
 
+// Export / Import DOM refs
+const btnExport     = document.getElementById('btnExport');
+const importFile    = document.getElementById('importFile');
+
 // ── Storage ────────────────────────────────────────────
 function loadProjects() {
   try {
@@ -36,6 +40,71 @@ function loadProjects() {
 
 function saveProjects() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+}
+
+// ── Export / Import ────────────────────────────────────
+function exportProjects() {
+  const data = JSON.stringify(projects, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'projects.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// Import JSON file and replace local projects (after confirmation).
+function importProjectsFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!Array.isArray(parsed)) {
+        alert('Invalid file: expected an array of projects.');
+        return;
+      }
+      const existingCount = projects.length;
+      const importCount = parsed.length;
+      const msg = 'Importing ' + importCount + ' project(s) will replace your ' +
+        existingCount + ' locally saved project(s). Continue?';
+      if (!confirm(msg)) return;
+      projects = parsed;
+      saveProjects();
+      render(searchInput.value);
+      alert('Projects imported successfully.');
+    } catch (err) {
+      alert('Error parsing JSON: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// Optionally load a global projects.json from the site root when localStorage is empty.
+// Useful when hosting on GitHub Pages: commit your exported projects.json to the repo root
+// so first-time visitors see your projects automatically.
+function tryLoadGlobalProjects() {
+  fetch('projects.json', { cache: 'no-store' })
+    .then(function (r) {
+      if (!r.ok) return null;
+      return r.json();
+    })
+    .then(function (data) {
+      if (!data) return;
+      if (Array.isArray(data) && projects.length === 0 && data.length > 0) {
+        projects = data;
+        saveProjects();
+        render();
+        console.log('Loaded global projects.json');
+      }
+    })
+    .catch(function (err) {
+      // Silent fail — file may not exist or CORS may block during local dev
+      console.debug('Global projects.json not loaded:', err);
+    });
 }
 
 // ── Utilities ──────────────────────────────────────────
@@ -275,6 +344,20 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
 });
 
+// Export
+if (btnExport) {
+  btnExport.addEventListener('click', exportProjects);
+}
+
+// Import
+if (importFile) {
+  importFile.addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    importProjectsFile(file);
+    e.target.value = ''; // allow the same file to be picked again
+  });
+}
+
 // Auto-fetch icon
 document.getElementById('btnFetchIcon').addEventListener('click', function () {
   var url = fUrl.value.trim();
@@ -362,4 +445,5 @@ projectForm.addEventListener('submit', function (e) {
 
 // ── Init ──────────────────────────────────────────────
 loadProjects();
+tryLoadGlobalProjects();
 render();
